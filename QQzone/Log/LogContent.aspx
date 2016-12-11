@@ -29,9 +29,9 @@
             <asp:LinkButton ID="lbtDelete" runat="server" OnClick="lbDelete_Click" Text="删除日志"></asp:LinkButton></div>
             <br />
             <br />
-            <asp:LinkButton ID="lbtLast" runat="server" OnClick="lbtLast_Click"></asp:LinkButton>
+            <asp:LinkButton ID="lbtLast" runat="server" OnClick="lbtLast_Click" Visible="false"></asp:LinkButton>
             &nbsp;
-            <asp:LinkButton ID="lbtForrow" runat="server" OnClick="lbtForrow_Click"></asp:LinkButton>
+            <asp:LinkButton ID="lbtForrow" runat="server" OnClick="lbtForrow_Click" Visible="false"></asp:LinkButton>
             <br />
             <br />
             <br />
