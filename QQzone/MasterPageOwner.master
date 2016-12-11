@@ -1,0 +1,47 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPageOwner.master.cs" Inherits="MasterPageOwner" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <div id="divMe" runat="server" visible="true">
+            <asp:LinkButton Text="个人中心" runat="server" PostBackUrl="~/Home.aspx"></asp:LinkButton></div>
+            <div id="divFr" runat="server" visible="false">
+            <asp:LinkButton Text="返回个人中心" runat="server" ID="lbtFr" OnClick="lbtFr_Click"></asp:LinkButton>
+            </div>
+            <asp:LinkButton Text="好友" runat="server" PostBackUrl="~/Friend/FriendList.aspx"></asp:LinkButton>
+            <br />
+            <br />
+            
+           <asp:Image ID="scup" runat="server" Width="100" Height="100" />
+            &nbsp;
+           <asp:Label ID="lbName" runat="server"></asp:Label>
+            &nbsp;
+            <br />
+            <br />
+            &nbsp;<asp:LinkButton ID="toPerson" Text="个人档" runat="server" PostBackUrl="~/Person/Person.aspx"></asp:LinkButton>
+            &nbsp;
+        <asp:LinkButton ID="toAlbum" Text="相册" runat="server" PostBackUrl="~/Album/Album.aspx"></asp:LinkButton>
+            &nbsp;
+        <asp:LinkButton ID="toLog" Text="日志" runat="server" PostBackUrl="~/Log/Log.aspx"></asp:LinkButton>
+            &nbsp;
+        <asp:LinkButton ID="toMessage" Text="留言板" runat="server" PostBackUrl="~/Message/Message.aspx"></asp:LinkButton>
+            &nbsp;
+            &nbsp;
+        <asp:LinkButton ID="toMyhistory" Text="过往动态" runat="server" PostBackUrl="~/History/MyHistory.aspx"></asp:LinkButton>
+            <asp:LinkButton ID="toVisitor" Text="访客记录" runat="server" PostBackUrl="~/Visitor/Visitor.aspx"></asp:LinkButton>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                <br />
+                <br />
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
