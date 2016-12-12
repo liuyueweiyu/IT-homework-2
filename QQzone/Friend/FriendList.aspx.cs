@@ -44,7 +44,7 @@ public partial class Friend_FriendList : System.Web.UI.Page
             int me =Convert.ToInt32( dt.Rows[0][1].ToString());
 
             int friend = Convert.ToInt32(dt.Rows[0][2].ToString());
-
+            //双向删除好友关系
             sql = "delete from Friends where me='" + me + "' and friends = '" + friend + "'";
 
             int flag = myclass.DataSQL(sql);
@@ -58,7 +58,7 @@ public partial class Friend_FriendList : System.Web.UI.Page
                 Response.Write("<script>alert('删除成功！');location='FriendList.aspx'</script>");
             }
         }
-
+        //跳页
         if (e.CommandName == "Jump")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -69,22 +69,26 @@ public partial class Friend_FriendList : System.Web.UI.Page
 
     protected void lbtName_Click(object sender, EventArgs e)
     {
+        //通过名字查找
         divName.Visible = true;
     }
 
     protected void lbtNumber_Click(object sender, EventArgs e)
     {
+        //通过账号查找
         divNumber.Visible = true;
     }
 
     protected void btnName_Click(object sender, EventArgs e)
     {
+        //传名字值
         Session["name"] = txtName.Text;
         Server.Transfer("Add.aspx");
     }
 
     protected void btnNumbre_Click(object sender, EventArgs e)
     {
+        //传数字值
         Session["number"] = txtNumber.Text;
         Server.Transfer("Add.aspx");
     }

@@ -11,7 +11,7 @@
                     <br />
 
 
-        <asp:LinkButton ID="lbnDraft" runat="server" Text="草稿箱" PostBackUrl="~/Log/Draft.aspx"></asp:LinkButton>
+        <asp:LinkButton ID="lbnDraft" runat="server" Text="日志" PostBackUrl="~/Log/Log.aspx"></asp:LinkButton>
             &nbsp;
             <br />
             <br />

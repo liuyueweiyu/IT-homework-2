@@ -56,6 +56,7 @@ public partial class Log_DraftContent : System.Web.UI.Page
 
     protected void lbDelete_Click(object sender, EventArgs e)
     {
+        //删除草稿
         myClass myclass = new myClass();
         int logid = Convert.ToInt32(Request.QueryString["logid"]);
         string sql = "delete from Log where logid='" + logid + "'";

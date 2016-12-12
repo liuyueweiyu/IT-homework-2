@@ -22,7 +22,8 @@
                     <br />
                     <asp:LinkButton ID="lbtLog" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"Log/LogContent.aspx?logid="+Eval("logs") %>' ></asp:LinkButton>
                     <asp:LinkButton ID="lbtPhoto" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"Album/ThePhoto.aspx?photoid="+Eval("photos") %>'></asp:LinkButton>
-                    <asp:Image ID="imgPhoto" ImageUrl='<%#Eval("picture") %>' runat="server" Visible="true" />
+                    <asp:Image ID="imgPhoto" ImageUrl='<%#"../"+Eval("picture") %>' runat="server" Visible="false" />
+                    <asp:Label Text='<%# Eval("lable") %>' runat="server"></asp:Label>
                     <br />
                     <br />
                     <asp:Repeater ID="rptComment" runat="server" OnItemCommand="rptComment_ItemCommand">

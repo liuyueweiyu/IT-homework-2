@@ -19,9 +19,9 @@
                 <h3><%#Eval ("statement") %></h3>
                 <h3><%# Eval("other") %></h3>
                 <br />
-                <asp:LinkButton ID="lbtLog" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"Log/LogContent.aspx?logid="+Eval("logs") %>'></asp:LinkButton>
-                <asp:LinkButton ID="lbtPhoto" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"Album/ThePhoto.aspx?photoid="+Eval("photos") %>'></asp:LinkButton>
-                <asp:Image ID="imgPhoto" ImageUrl='<%#Eval("picture") %>' runat="server" Visible="true" />
+                <asp:LinkButton ID="lbtLog" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"../Log/LogContent.aspx?logid="+Eval("logs") %>'></asp:LinkButton>
+                <asp:LinkButton ID="lbtPhoto" runat="server" Text="查看详情" Visible="true" PostBackUrl='<%#"../Album/ThePhoto.aspx?photoid="+Eval("photos") %>'></asp:LinkButton>
+                <asp:Image ID="imgPhoto" ImageUrl='<%#Eval("picture") %>' runat="server" Visible="false"/>
                 <br />
                 <br />
                 <asp:Repeater ID="rptComment" runat="server" OnItemCommand="rptComment_ItemCommand">
@@ -32,7 +32,7 @@
                             回复<asp:LinkButton ID="lbtPublish" Text='<%# Eval("_staterownername")%>' runat="server" CommandName="Jump2" CommandArgument='<%#Eval("_stateowner") %>'></asp:LinkButton>
                             :<%# Eval("_statement") %>
                             <br />
-                            <asp:LinkButton ID="lbtDelete" runat="server" Text="删除" CommandName="Delete" CommandArgument='<%#Eval("_stateid") %>'></asp:LinkButton>
+                            <asp:LinkButton ID="lbtDelete" runat="server" Text="删除" CommandName="Delete" CommandArgument='<%#Eval("statecommentid") %>'></asp:LinkButton>
                     </ItemTemplate>
                     <FooterTemplate></FooterTemplate>
                 </asp:Repeater>

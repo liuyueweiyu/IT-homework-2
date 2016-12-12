@@ -11,12 +11,12 @@ public partial class Log_Abstract : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         string sql;
-
+        //验证登陆
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
         else
         {
-
+            //验证界面
             int id;
 
             if (Session["Friendid"] != null)
@@ -65,6 +65,7 @@ public partial class Log_Abstract : System.Web.UI.Page
 
     protected void btnSub_Click(object sender, EventArgs e)
     {
+        //添加日志分类
         int id = Convert.ToInt16(Session["id"].ToString());
         string classname = txtAdd.Text;
 
@@ -90,7 +91,7 @@ public partial class Log_Abstract : System.Web.UI.Page
     protected void rptClassfy_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //删除分类
         if (e.CommandName == "Delete")
         {
             int classfyid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -102,7 +103,7 @@ public partial class Log_Abstract : System.Web.UI.Page
             dt = myclass.JudgeIor(sql);
 
             string campare = "默认分类";
-
+            //不能删除默认分类
             if (string.Compare(campare, dt.Rows[0][1].ToString()) == 0)
                 Response.Write("<script>alert('默认分类不能删除！')</script>");
             else

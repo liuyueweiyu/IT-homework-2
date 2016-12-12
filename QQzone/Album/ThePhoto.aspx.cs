@@ -12,7 +12,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
     {
         myClass myclass = new myClass();
 
-
+        //判断进入界面
 
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
@@ -28,7 +28,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
             }
             else
                 id = Convert.ToInt32(Session["id"].ToString());
-
+            //判断是否为从个人中心跳转过来的，若是的则对进行好友界面还是用户界面的选择
             int photoid = Convert.ToInt32(Request.QueryString["photoid"]);
 
            string sql = "select * from Photo where photoid = '" + photoid + "'";
@@ -67,17 +67,17 @@ public partial class Album_ThePhoto : System.Web.UI.Page
                 sql = "select * from Reply where classid = '" + photoid + "' and replyclass = 'photo'";
 
                 dt = myclass.JudgeIor(sql);
-
+                //新建识图排序
                 DataView dv = new DataView(dt);
 
                 dv.Sort = "replyid desc";
 
                 dt = dv.ToTable();
-
+                //绑定用户界面
                 rptPhoto.DataSource = dt;
 
                 rptPhoto.DataBind();
-
+                //绑定好友界面
                 rptFr.DataSource = dt;
 
                 rptFr.DataBind();
@@ -90,14 +90,14 @@ public partial class Album_ThePhoto : System.Web.UI.Page
 
         int id = Convert.ToInt32(Session["id"].ToString());
         int friendid;
-
+        //判断是否在好友页面
         if (Session["Friendid"] == null)
             friendid = id;
         else
             friendid = Convert.ToInt32(Session["Friendid"].ToString());
 
         string reply = txtReply.Text;
-
+        //验证空值
         if (reply.Length == 0)
             Response.Write("<script>alert('输入不能为空！')</script>");
         else
@@ -167,7 +167,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
     protected void rptPhoto_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //删除评论
         if (e.CommandName == "Delete")
         {
             int replyid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -183,7 +183,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
             sql = "delete from Reply where replyid='" + replyid + "'";
 
             int flag = myclass.DataSQL(sql);
-
+            //同时删除动态评论
             sql = "delete from StateComment where _statetime = '" + time + "'";
 
             flag = myclass.DataSQL(sql);
@@ -192,7 +192,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
                 Response.Write("<script>alert('删除成功！')</script>");
             Server.Transfer("ThePhoto.aspx");
         }
-
+        //回复评论形成第二层repeater
         if (e.CommandName == "Anwser")
         {
             if (((TextBox)e.Item.FindControl("txtAnwserCom")).Text.Length == 0)
@@ -242,7 +242,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
                 Server.Transfer("ThePhoto.aspx");
             }
 
-
+            //跳页至好友界面
             if (e.CommandName == "Jump")
             {
                 int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -256,7 +256,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
     protected void rptComment_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //删除楼中楼
         if (e.CommandName == "Delete")
         {
             int _replyid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -269,13 +269,14 @@ public partial class Album_ThePhoto : System.Web.UI.Page
                 Response.Write("<script>alert('删除成功！')</script>");
             Server.Transfer("ThePhoto.aspx");
         }
-
+        //跳至好友界面
         if (e.CommandName == "Jump1")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
             Session["Friendid"] = friendid.ToString();
             Response.Write("<script>window.location='../Person/Person.aspx'</script>");
         }
+        //跳至好友界面
         if (e.CommandName == "Jump2")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -313,7 +314,7 @@ public partial class Album_ThePhoto : System.Web.UI.Page
     protected void rptFr_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //回复评论形成第二层repeater
         if (e.CommandName == "Anwser")
         {
             if (((TextBox)e.Item.FindControl("txtAnwserCom")).Text.Length == 0)
@@ -357,15 +358,12 @@ public partial class Album_ThePhoto : System.Web.UI.Page
 
                 int flag = myclass.DataSQL(sql);
 
-
-
                 if (flag == 1)
                     Response.Write("<script>alert('回复成功！')</script>");
                 Server.Transfer("ThePhoto.aspx");
             }
         }
-
-
+        //跳转好友界面
         if (e.CommandName == "Jump")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -376,6 +374,8 @@ public partial class Album_ThePhoto : System.Web.UI.Page
     //好友内层repeater
     protected void rptFrC_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
+        //跳转好友界面
+
         if (e.CommandName == "Jump1")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());

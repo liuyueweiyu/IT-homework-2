@@ -87,7 +87,7 @@ public partial class Log_LogContent : System.Web.UI.Page
 
     protected void lbDelete_Click(object sender, EventArgs e)
     {
-
+        //删除日志
 
         myClass myclass = new myClass();
         int logid = Convert.ToInt32(Request.QueryString["logid"]);

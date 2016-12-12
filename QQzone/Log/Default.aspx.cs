@@ -11,6 +11,7 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        //验证登陆
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
         else
@@ -26,7 +27,7 @@ public partial class _Default : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //动态绑定下拉框
             dropClass.DataSource = dt;
 
             dropClass.DataTextField = "classfyname";
@@ -58,9 +59,9 @@ public partial class _Default : System.Web.UI.Page
             string sql = "select * from LogClass where classfyname='" + classr + "'and logowner ='" + id + "'";
 
             dt = myclass.JudgeIor(sql);
-
+            //提取纯文本
             string simplify = System.Text.RegularExpressions.Regex.Replace(content, @"<[///!]*?[^<>]*?>", "").Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("&nbsp;", "");
-
+            //判断是否要截取
             if (simplify.Length >= 50)
                 simplify = simplify.Substring(0, 50) + "....";
 
@@ -69,7 +70,7 @@ public partial class _Default : System.Web.UI.Page
             sql = "insert into Log(title,logtext,author,logtime,logpower,_classfyid,simplify) values('" + title + "','" + content + "','" + id + "','" + now + "','" + power + "','" + classid + "','" + simplify + "')";
 
             int flag = myclass.DataSQL(sql);
-
+            //判断分类决定是否要同步动态
             sql = "select * from Log where logtime='" + now + "'and title = '" + title + "'";
             dt = myclass.JudgeIor(sql);
             int logid = Convert.ToInt32(dt.Rows[0][0].ToString());
@@ -104,6 +105,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void btnDrafts_Click(object sender, EventArgs e)
     {
+        //功能同上
         int id = Convert.ToInt32(Session["id"].ToString());
         string title = txtTitle.Text;
         string content = Request.Form["content1"];
@@ -149,7 +151,9 @@ public partial class _Default : System.Web.UI.Page
     }
 
     protected void lbtCancle_Click(object sender, EventArgs e)
+    
     {
+        //注销
         Session.Clear();
         Response.Write("<script>alert('注销成功！')</script>");
         Server.Transfer("Login.aspx");

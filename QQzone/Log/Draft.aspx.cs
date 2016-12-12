@@ -10,6 +10,7 @@ public partial class Log_Draft : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        //验证登陆
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
         else
@@ -34,7 +35,7 @@ public partial class Log_Draft : System.Web.UI.Page
     {
         myClass myclass = new myClass();
 
-
+        //发布日志
         if (e.CommandName == "Submit")
         {
             int logid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -45,7 +46,7 @@ public partial class Log_Draft : System.Web.UI.Page
             string title = dt.Rows[0][1].ToString();
             string simplify = dt.Rows[0][8].ToString();
             DateTime now = DateTime.Now;
-
+            //判断分类决定是否要同步动态到个人中心
             sql = "select * from Log where logid = '" + logid + "'";
             dt = myclass.JudgeIor(sql);
             string compare = "所有人可见";

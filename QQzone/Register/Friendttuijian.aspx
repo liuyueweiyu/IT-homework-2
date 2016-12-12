@@ -11,7 +11,7 @@
         <div>
             选一个你最感兴趣的吧~
                 <asp:RadioButtonList ID="radlHobby" runat="server" RepeatDirection="Horizontal" RepeatLayout="Flow">
-                    <asp:ListItem>动漫</asp:ListItem>
+                    <asp:ListItem Selected="True">动漫</asp:ListItem>
                     <asp:ListItem>影视剧</asp:ListItem>
                     <asp:ListItem>运动</asp:ListItem>
                     <asp:ListItem>美食</asp:ListItem>

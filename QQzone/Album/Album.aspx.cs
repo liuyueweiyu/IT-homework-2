@@ -34,17 +34,17 @@ public partial class Album_Album : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //构建视图排序
             DataView dv = new DataView(dt);
 
             dv.Sort = "albumid desc";
 
             dt = dv.ToTable();
-
+            //绑定用户视角repeater
             rptAlbum.DataSource = dt;
 
             rptAlbum.DataBind();
-
+            //绑定好友视角repeater
             sql = "select * from Album where owner='" + id + "' and authority='所有人可见'";
 
             dt = myclass.JudgeIor(sql);
@@ -61,11 +61,11 @@ public partial class Album_Album : System.Web.UI.Page
         }
     }
 
-            protected void rptAlbum_ItemCommand(object source, RepeaterCommandEventArgs e)
+     protected void rptAlbum_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
 
-
+        //删除相册
         if (e.CommandName == "Delete")
         {
             int albumid = Convert.ToInt32(e.CommandArgument.ToString());

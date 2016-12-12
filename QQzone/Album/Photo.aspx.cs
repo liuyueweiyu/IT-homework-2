@@ -11,7 +11,7 @@ public partial class Album_Photo : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         int id;
-
+        //判断显示用户界面还是好友界面
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
         else
@@ -35,11 +35,11 @@ public partial class Album_Photo : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //绑定用户视角repeater
             rptPhoto.DataSource = dt;
 
             rptPhoto.DataBind();
-
+            //绑定好友视角repeater
             rptFr.DataSource = dt;
 
             rptFr.DataBind();
@@ -50,7 +50,7 @@ public partial class Album_Photo : System.Web.UI.Page
     {
         myClass myclass = new myClass();
 
-
+        //删除照片
         if (e.CommandName == "Delete")
         {
             int photoid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -68,6 +68,7 @@ public partial class Album_Photo : System.Web.UI.Page
 
         if (e.CommandName == "Interface")
         {
+            //修改封面
             int albumid = Convert.ToInt32(Request.QueryString["albumid"]);
 
             int photoid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -91,7 +92,7 @@ public partial class Album_Photo : System.Web.UI.Page
             }
         }
     }
-
+    //判断文件是否为图片
     private static bool IsAllowedExtension(FileUpload upfile)
     {
         string strOldFilePath = "";
@@ -133,15 +134,17 @@ public partial class Album_Photo : System.Web.UI.Page
                 }
                 if (IsAllowedExtension(fup) == true)
                 {
+                    //获取文件名字上传并存储
                     string filepath = fup.PostedFile.FileName;
                     string filename = filepath.Substring(filepath.LastIndexOf("\\") + 1);
                     string serverpath = Server.MapPath("picture/") + filename;
                     fup.PostedFile.SaveAs(serverpath);
+                    //改绝对路径为相对路径
                     serverpath = "picture/" + filename;
                     DateTime now = DateTime.Now;
                     string sql = "insert into Photo (photoname,uptime,path,album)values('" + filename + "','" + now + "','" + serverpath + "','" + albumid + "')";
                     int flag = myclass.DataSQL(sql);
-
+                    //判断相册权限决定是否发布动态到个人中心
                     sql = "select * from Album where albumid = '" + albumid + "'";
                     DataTable dt = new DataTable();
                     dt = myclass.JudgeIor(sql);

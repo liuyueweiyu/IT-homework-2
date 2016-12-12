@@ -13,18 +13,19 @@ public partial class Friend_Add : System.Web.UI.Page
         int id;
 
         string sql;
-
+        //判断是否登陆
 
         if (Session["id"] == null)
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
         else
         {
+            
             id = Convert.ToInt32(Session["id"].ToString());
 
             DataTable dt = new DataTable();
 
             myClass myclass = new myClass();
-
+            //判断为哪种查找方式再进行模糊查找
             if (Session["name"]==null)
             {
                 int number =Convert.ToInt32( Session["number"].ToString());
@@ -55,7 +56,7 @@ public partial class Friend_Add : System.Web.UI.Page
     protected void rptAdd_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //双向添加好友同时添加两条记录
         if (e.CommandName == "Add")
         {
             int _id = Convert.ToInt32(e.CommandArgument.ToString());
@@ -77,7 +78,7 @@ public partial class Friend_Add : System.Web.UI.Page
                 Response.Write("<script>alert('添加失败！')</script>");
         }
 
-
+        //跳转至好友空间
         if (e.CommandName == "Jump")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());

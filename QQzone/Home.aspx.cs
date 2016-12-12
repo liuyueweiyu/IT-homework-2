@@ -35,23 +35,26 @@ public partial class Home : System.Web.UI.Page
 
                 count = dt.Rows.Count;
 
-                for (i = 0; i < dt.Rows.Count; i++)
+                if (count > 0)
                 {
-                    sql = "select * from State where stater='" + Convert.ToInt32(dt.Rows[0][i].ToString()) + "'";
-                    dt = myclass.JudgeIor(sql);
-                    if (dt.Rows.Count != 0)
-                        newdt.Merge(dt);
+                    for (i = 0; i < dt.Rows.Count; i++)
+                    {
+                        sql = "select * from State where stater='" + Convert.ToInt32(dt.Rows[0][i].ToString()) + "'";
+                        dt = myclass.JudgeIor(sql);
+                        if (dt.Rows.Count != 0)
+                            newdt.Merge(dt);
+                    }
+
+                    DataView dv = new DataView(newdt);
+
+                    dv.Sort = "stateid desc";
+
+                    dt = dv.ToTable();
+
+                    rptState.DataSource = dt;
+
+                    rptState.DataBind();
                 }
-
-                DataView dv = new DataView(newdt);
-
-                dv.Sort = "stateid desc";
-
-                dt = dv.ToTable();
-
-                rptState.DataSource = dt;
-
-                rptState.DataBind();
             }
         }
     }

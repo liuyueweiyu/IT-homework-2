@@ -42,7 +42,7 @@ public partial class Log_DraftEditor : System.Web.UI.Page
                 sql = "select * from LogClass where logowner='" + id + "'";
 
                 dt = myclass.JudgeIor(sql);
-
+                //动态绑定下拉框
                 dropClass.DataSource = dt;
 
                 dropClass.DataTextField = "classfyname";
@@ -76,12 +76,12 @@ public partial class Log_DraftEditor : System.Web.UI.Page
             dt = myclass.JudgeIor(sql);
 
             int classid = Convert.ToInt16(dt.Rows[0][0].ToString());
-
+            //获取纯文本
             string simplify = System.Text.RegularExpressions.Regex.Replace(content, @"<[///!]*?[^<>]*?>", "").Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "").Replace("&nbsp;", "");
-
+            //判断是否截取
             if (simplify.Length >= 50)
                 simplify = simplify.Substring(0, 50) + "....";
-
+            //判断是否要发动态
             sql = "update Log set title='" + title + "',simplify='" + simplify + "',logtext='" + content + "',logtime='" + now + "',logpower='" + power + "', _classfyid='" + classid + "',draft='0' where logid = '" + logid + "'";
 
             int flag = myclass.DataSQL(sql);
@@ -108,6 +108,7 @@ public partial class Log_DraftEditor : System.Web.UI.Page
 
     protected void lbtCancle_Click(object sender, EventArgs e)
     {
+        //注销
         Session.Clear();
         Response.Write("<script>alert('注销成功！')</script>");
         Server.Transfer("../Login.aspx");
@@ -115,6 +116,7 @@ public partial class Log_DraftEditor : System.Web.UI.Page
 
     protected void btnSub_Click1(object sender, EventArgs e)
     {
+        //修改草稿箱
         int id = Convert.ToInt32(Session["id"].ToString());
         int logid = Convert.ToInt32(Session["drafttextid"].ToString());
         string title = txtTitle.Text;

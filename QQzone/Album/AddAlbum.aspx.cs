@@ -13,7 +13,7 @@ public partial class Album_AddAlbum : System.Web.UI.Page
             Response.Write("<script>alert('请先登录！');location='../Login.aspx'</script>");
     }
 
-
+    //添加相册
     protected void btnSub_Click(object sender, EventArgs e)
     {
         myClass myclass = new myClass();
