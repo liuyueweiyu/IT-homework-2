@@ -12,6 +12,7 @@ public partial class History_MyHistory : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            //判断是否登陆
             myClass myclass = new myClass();
             if (Session["id"] == null)
             {
@@ -22,7 +23,7 @@ public partial class History_MyHistory : System.Web.UI.Page
             {
 
                 int id;
-
+                //判断进入页面
                 if (Session["Friendid"] != null)
                 {
                     id = Convert.ToInt32(Session["Friendid"].ToString());
@@ -38,17 +39,17 @@ public partial class History_MyHistory : System.Web.UI.Page
                 sql = "select * from State where stater ='" + id + "'";
 
                 dt = myclass.JudgeIor(sql);
-
+                //新建识图排序
                 DataView dv = new DataView(dt);
 
                 dv.Sort = "stateid desc";
 
                 dt = dv.ToTable();
-
+                //绑定用户界面repeater
                 rptState.DataSource = dt;
 
                 rptState.DataBind();
-
+                //绑定好友界面repeater
                 rptFr.DataSource = dt;
 
                 rptFr.DataBind();
@@ -65,10 +66,12 @@ public partial class History_MyHistory : System.Web.UI.Page
         int id = Convert.ToInt32(Session["id"].ToString());
         string state = txtState.Text;
         DateTime now = DateTime.Now;
+        //判断空值
         if (state.Length == 0)
             Response.Write("<script>alert('输入不能为空！')</script>");
         else
         {
+            //发表说说
             string name = myclass.RerdName(id);
             string sculpture = myclass.RerdSculpture(id);
             string sql = "insert into State (stater,statetime,statement,statelike,statername,staterscu) values('" + id + "','" + now + "','" + state + "',',','" + name + "','" + sculpture + "')";
@@ -80,11 +83,11 @@ public partial class History_MyHistory : System.Web.UI.Page
 
 
 
-
+    //内层repeater绑定
     protected void rptState_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //内层repeater绑定
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             DataRowView drvw = (DataRowView)e.Item.DataItem;
@@ -104,7 +107,7 @@ public partial class History_MyHistory : System.Web.UI.Page
             rept.DataBind();
 
         }
-
+        //判断外层repeater中部分控件是否显示
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             DataRowView drvw = (DataRowView)e.Item.DataItem;
@@ -116,12 +119,13 @@ public partial class History_MyHistory : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //显示图片相关控件
             if (dt.Rows[0][10].ToString().Length == 0)
             {
                 LinkButton Log = (LinkButton)e.Item.FindControl("lbtLog");
                 Log.Visible = false;
             }
+            //显示日志部分控件
             if (dt.Rows[0][11].ToString().Length == 0)
             {
                 LinkButton Photo = (LinkButton)e.Item.FindControl("lbtPhoto");
@@ -136,6 +140,7 @@ public partial class History_MyHistory : System.Web.UI.Page
     {
         myClass myclass = new myClass();
 
+        //发表评论
         if (e.CommandName == "Anwser")
         {
             int id = Convert.ToInt32(Session["id"].ToString());
@@ -216,7 +221,7 @@ public partial class History_MyHistory : System.Web.UI.Page
         }
 
 
-
+        //点赞
         if (e.CommandName == "Like")
         {
             int id = Convert.ToInt32(Session["id"].ToString());
@@ -230,9 +235,9 @@ public partial class History_MyHistory : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            
             string like = dt.Rows[0][6].ToString();
-
+            //判断是否重复点赞
             if (like.Contains(locks))
                 Response.Write("<script>alert('已经点过赞了哟！');location='Myhistory.aspx'</script>");
             else
@@ -248,19 +253,45 @@ public partial class History_MyHistory : System.Web.UI.Page
 
             }
         }
-
+        //删除
         if (e.CommandName == "Delete")
         {
             int stateid = Convert.ToInt32(e.CommandArgument.ToString());
 
-            string sql = "delete from State where stateid='" + stateid + "'";
+            string sql = "select * from State where stateid = '" + stateid + "'";
+
+            DataTable dt = new DataTable();
+
+            dt = myclass.JudgeIor(sql);
+            //同步删除照片
+            if (dt.Rows[0][10].ToString().Length==0)
+
+            {
+                int photoid = Convert.ToInt32(dt.Rows[0][11].ToString());
+
+                sql = "delete from Photo where photoid='" + photoid + "'";
+
+                myclass.DataSQL(sql);
+            }
+            //同步删除日志
+            else
+            {
+                int logid = Convert.ToInt32(dt.Rows[0][10].ToString());
+
+                sql = "delete from Log where logid='" + logid + "'";
+
+                myclass.DataSQL(sql);
+            }
+            //删除动态
+
+            sql = "delete from State where stateid='" + stateid + "'";
 
             int flag = myclass.DataSQL(sql);
 
             if (flag == 1)
                 Response.Write("<script>alert('删除成功！');location='Myhistory.aspx'</script>");
         }
-
+        //跳页
         if (e.CommandName == "Jump")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -273,7 +304,7 @@ public partial class History_MyHistory : System.Web.UI.Page
     protected void rptComment_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //跳页
         if (e.CommandName == "Jump1")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -288,12 +319,38 @@ public partial class History_MyHistory : System.Web.UI.Page
             //Server.Transfer("Person/Person.asxp");
             Response.Write("<script>window.location='Myhistory.aspx'</script>");
         }
-
+        //删除评论
         if (e.CommandName == "Delete")
         {
-            int stateid = Convert.ToInt32(e.CommandArgument.ToString());
+            int statecommentid = Convert.ToInt32(e.CommandArgument.ToString());
 
-            string sql = "delete from StateComment where _stateid='" + stateid + "'";
+            string sql = "select * from StateComment where statecommentid = '" + statecommentid + "'";
+
+            DataTable dt = new DataTable();
+
+            dt = myclass.JudgeIor(sql);
+            
+            string time = dt.Rows[0][3].ToString();
+
+            //同步删除照片评论
+            if (dt.Rows[0][6].ToString().Length==0)
+            {
+                int classid = Convert.ToInt32(dt.Rows[0][7].ToString());
+                string classfy = "photo";
+                sql = "delete from Reply where replytime='" + time + "' and classid ='" + classid + "' and replyclass = '" + classfy + "' ";
+                myclass.DataSQL(sql);
+            }
+            //同步删除日志评论
+            else
+            {
+                    int classid = Convert.ToInt32(dt.Rows[0][6].ToString());
+                    string classfy = "log";
+                    sql = "delete from Reply where replytime='" + time + "' and classid ='" + classid + "' and replyclass = '" + classfy + "' ";
+                    myclass.DataSQL(sql);
+              
+            }
+            //删除评论
+            sql = "delete from StateComment where statecommentid='" + statecommentid + "'";
 
             int flag = myclass.DataSQL(sql);
 
@@ -303,11 +360,11 @@ public partial class History_MyHistory : System.Web.UI.Page
         }
 
     }
-
+    
     protected void rptFr_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //绑定内层repeater
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             DataRowView drvw = (DataRowView)e.Item.DataItem;
@@ -327,7 +384,7 @@ public partial class History_MyHistory : System.Web.UI.Page
             rept.DataBind();
 
         }
-
+        //控制repeater控件中部分控件是否显示
         if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
         {
             DataRowView drvw = (DataRowView)e.Item.DataItem;
@@ -339,12 +396,13 @@ public partial class History_MyHistory : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //显示相册相关控件
             if (dt.Rows[0][10].ToString().Length == 0)
             {
                 LinkButton Log = (LinkButton)e.Item.FindControl("lbtLog");
                 Log.Visible = false;
             }
+            //显示日志相关控件
             if (dt.Rows[0][11].ToString().Length == 0)
             {
                 LinkButton Photo = (LinkButton)e.Item.FindControl("lbtPhoto");
@@ -358,7 +416,7 @@ public partial class History_MyHistory : System.Web.UI.Page
     protected void rptFr_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //回复
         if (e.CommandName == "Anwser")
         {
             int id = Convert.ToInt32(Session["id"].ToString());
@@ -439,7 +497,7 @@ public partial class History_MyHistory : System.Web.UI.Page
         }
 
 
-
+        //点赞
         if (e.CommandName == "Like")
         {
             int id = Convert.ToInt32(Session["id"].ToString());
@@ -455,7 +513,7 @@ public partial class History_MyHistory : System.Web.UI.Page
             dt = myclass.JudgeIor(sql);
 
             string like = dt.Rows[0][6].ToString();
-
+            //不能重复点赞
             if (like.Contains(locks))
                 Response.Write("<script>alert('已经点过赞了哟！');location='Myhistory.aspx'</script>");
             else
@@ -471,7 +529,7 @@ public partial class History_MyHistory : System.Web.UI.Page
 
             }
         }
-
+        //跳页
         if (e.CommandName == "Jump")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -482,6 +540,7 @@ public partial class History_MyHistory : System.Web.UI.Page
 
     protected void rptCom_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
+        //跳页
         if (e.CommandName == "Jump1")
         {
             int friendid = Convert.ToInt32(e.CommandArgument.ToString());

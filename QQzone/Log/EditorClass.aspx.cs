@@ -37,20 +37,33 @@ public partial class Log_EditorClass : System.Web.UI.Page
     protected void rptClass_ItemCommand(object source, RepeaterCommandEventArgs e)
     {
         myClass myclass = new myClass();
-
+        //删除分类
         if (e.CommandName == "Delete")
         {
             int classid = Convert.ToInt32(e.CommandArgument.ToString());
 
-            string sql = "delete from LogClass where classfyid='" + classid + "'";
+            string sql = "select * from LogClass where classfyid = '" + classid + "'";
 
-            int flag = myclass.DataSQL(sql);
+            DataTable dt = new DataTable();
 
-            if (flag == 1)
-                Response.Write("<script>alert('删除成功！')</script>");
-            Server.Transfer("EditorClass.aspx");
+            dt = myclass.JudgeIor(sql);
+            //默认分类不能删
+            string campare = "默认分类";
+
+            if (string.Compare(campare, dt.Rows[0][1].ToString()) == 0)
+                Response.Write("<script>alert('默认分类不能删除！')</script>");
+            else
+            {
+                sql = "delete from LogClass where classfyid='" + classid + "'";
+
+                int flag = myclass.DataSQL(sql);
+
+                if (flag == 1)
+                    Response.Write("<script>alert('删除成功！')</script>");
+                Server.Transfer("EditorClass.aspx");
+            }
         }
-
+        //编辑分类名称
         if (e.CommandName == "Change")
         {
             int classid = Convert.ToInt32(e.CommandArgument.ToString());
@@ -62,7 +75,7 @@ public partial class Log_EditorClass : System.Web.UI.Page
             DataTable dt = new DataTable();
 
             dt = myclass.JudgeIor(sql);
-
+            //默认分类不能修改
             string campare = "默认分类";
 
             if (txt.Length == 0)
